@@ -1,0 +1,6 @@
+version: '2'
+syncs:
+  web-sync:
+    src: './web'
+    sync_userid: 1000
+    sync_groupid: 1000

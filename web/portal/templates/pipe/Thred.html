@@ -1,0 +1,113 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'bootstrap.min.css' %}">
+
+<div class="container my-3">
+<h1>{{ tiket.subject }}</h1>
+<div>
+    <b>STATUS</b> : {{ tiket.status }} 
+</div>
+<div>
+    <b>JIRA Tiket NUM</b> : {{ tiket.jira_tiket }}
+</div>
+
+{% for info in tiket.info_set.all %}
+<div>
+    <b>repoURL</b> : {{ info.repoURL }}
+</div>
+<div>
+    <b>branch</b> : {{ info.branch }}
+</div>
+{% endfor %}
+
+<div>
+    <b>생성일</b> : {{ tiket.create_date }} 
+</div>
+
+
+
+</br>
+<form action="{% url 'pipe:thred_create' tiket.id %}"  method="post" >{% csrf_token %}
+    <input type="hidden" id="jira_tiket" name="jira_tiket" value="{{tiket.jira_tiket}}">
+    <input type="hidden" id="thred" name="thred" value={{ tiket.thred_set.count }}>
+    {% if tiket.status == '점검 완료'%}
+    <input type="hidden" value="new Analysys psalm">
+    {% else %}
+    <input id='target_btn' type="submit" value="new Analysys psalm">
+    {% endif %}
+</form>
+<h5>{{ tiket.thred_set.count }}개의 점검 건이 있습니다.</h5>
+
+<div class="container my-3">
+    <table class="table">
+        <thead>
+        <tr>
+            <th >점검 시리얼</th>
+            <th >점검 일시</th>
+            <th >취약점 계</th>
+            <th >결과</th>         
+        </tr>
+        </thead>
+        <tbody>
+            {% for thred in tiket.thred_set.all %}
+            <script>
+                $(document).ready(function() {
+                    $("#{{thred.thred_num}}").click(function() {
+                        $.ajax({
+                            url : "{{thred.thred_num}}/list",
+                            success : function(result) {
+                                $("#message{{thred.thred_num}}").html(result);
+                            }
+                        });
+                    });
+                });
+            </script>
+            <td>{{ thred.content }}</td>
+            <td>{{ thred.create_date }}</td>
+            <td>{{ thred.psalmResult }}</td>
+            {% if thred.checkResult == 'safety' %}
+            <td class="table-primary">{{ thred.checkResult }}</td>
+            {% else %}
+            <td class="table-danger">
+                <div>
+                <a href="#" id="{{thred.thred_num}}">{{ thred.checkResult }}</a>
+            </td>
+            {% endif %}
+            <tr>
+                <td colspan="4">
+                    <span id="message{{thred.thred_num}}"></span>
+                </div>
+                </td>
+            </tr>
+        </tbody>
+        {% endfor %}
+    </table>
+</div>
+  
+
+
+<!--ajax test field--> 
+
+<div id="result"></div>
+<input type="hidden" id="branch" name="branch" value="{{tiket.branch}}">
+<input type="hidden" id="repoURL" name="repoURL" value="{{tiket.repoURL}}">
+<input type="hidden" id="jira_tiket" name="jira_tiket" value="{{tiket.jira_tiket}}">
+<input type="hidden" id="thred" name="thred" value={{ tiket.thred_set.count }}>
+<!--
+    <input type="submit" value="get result" id="getResult" /> 
+-->
+<script>
+$('#getResult').click( function() {
+    $.ajax({
+        url:"{%url 'pipe:thred_create' tiket.id %}",
+        dataType:'json',
+        type:'POST',
+        data:{'branch':$('#branch').val(), 'repoURL':$('#repoURL').val(), 'jira_tiket':$('#jira_tiket').val(), 'thred':$('#thred').val()},
+        success:function(result){
+            $('#result').text(result);
+        }
+    });
+})
+</script>

@@ -1,0 +1,3 @@
+django
+mysqlclient
+mariadb==1.0.9

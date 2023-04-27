@@ -1,0 +1,5 @@
+#db 데이터베이스 생성 오류
+docker exec -it sec_portal_db mysql -uroot -p'qwer1234!@' -e "SHOW DATABASES;"
+docker exec -it sec_portal_db mysql -uroot -p'qwer1234!@' -e "CREATE DATABASE portal_db;"
+
+

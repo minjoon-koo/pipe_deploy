@@ -1,0 +1,57 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'bootstrap.min.css' %}">
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<div class="container my-3">
+    <h4>Soldout SecureCoding Analysys board(PHP)</h4>
+    <table class="table">
+        <thead>
+        <tr class="table-dark">
+            <th>No</th>
+            <th>Repository Name</th>
+            <th>branch</th>
+            <th>JIRA ISSUE</th>
+            <th>status</th>
+            
+        </tr>
+        </thead>
+        <tbody>
+        {% if tiket_list %}
+        {% for tiket in tiket_list %}
+        <tr>
+            <td>{{ tiket.id }}</td>
+            <td>
+                <a href="{% url 'pipe:detail' tiket.id %}">{{ tiket.subject }}</a>
+            </td>
+            <td>{{ tiket.branch}}</td>
+            <td>{{ tiket.jira_tiket}}</td>
+            {% if tiket.status == '점검 완료' %}
+            <td class="table-primary"><a href="{% url 'pipe:detail' tiket.id %}">{{ tiket.status }}</a></td>
+            {% else %}
+            <td class="table-danger"><a href="{% url 'pipe:detail' tiket.id %}">{{ tiket.status }}</a></td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+            <td colspan="3">tt</td>
+        </tr>
+        {% endif %}
+        </tbody>
+    </table>
+</div>
+
+
+<!--ajax 호출로 리스트 갱신 할시 아래 스크립트 사용
+<script>
+    $(document).ready(function() {
+        $.ajax({
+        url:"{%url 'pipe:ajax_test' %}",
+        dataType:'json',
+        type:'POST',
+        data:{'msg':$('#msg').val()},
+    });
+    });
+</script>
+-->
