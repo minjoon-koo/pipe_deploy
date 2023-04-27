@@ -8,7 +8,7 @@ ENV MYSQL_DATABASE=portal_db \
     MYSQL_ROOT_PASSWORD=qwer1234!@
 
 # Copy custom configuration file (my.cnf) to container
-COPY my.cnf /etc/mysql/conf.d/
+#COPY my.cnf /etc/mysql/conf.d/
 
 # Expose the port 3306
 EXPOSE 3306
