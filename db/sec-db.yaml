@@ -25,7 +25,7 @@ spec:
             fieldRef:
               apiVersion: v1
               fieldPath: status.hostIP
-        image: acrsoldout.azurecr.io/db
+        image: acrsoldout.azurecr.io/minjoon-koo/pipe_deploy-db:latest
         imagePullPolicy: Always
         lifecycle:
         name: sec-db
