@@ -92,7 +92,7 @@ DATABASES = {
         'NAME': 'portal_db',
         'USER': 'root',
         'PASSWORD': 'qwer1234!@',
-        'HOST': 'db',
+        'HOST': 'sec-db',
         'PORT': '3306',
     }
 }
